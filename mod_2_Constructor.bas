@@ -47,7 +47,7 @@ Sub Show_Ch_Hint(ByVal deptName As String)
     Dim wsP As Worksheet: Set wsP = ThisWorkbook.Sheets("PZ_Control")
     Dim f As Range
     
-    wsP.Unprotect
+    wsP.Unprotect Password:=""
     wsP.Range("PZ_DeptCode").ClearContents ' Очищаем старый код по ИМЕНИ
     
     Set f = wsRef.Columns("G").Find(What:=deptName, LookIn:=xlValues, LookAt:=xlWhole)
@@ -58,7 +58,7 @@ Sub Show_Ch_Hint(ByVal deptName As String)
     Else
         Application.StatusBar = "MES: Код для цеха '" & deptName & "' не найден"
     End If
-    wsP.Protect
+    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
 End Sub
 
 ' =========================================================
@@ -149,9 +149,9 @@ Sub PZ_SendToBase_Safe()
         wsB.Parent.Save ' <--- ИСПРАВЛЕНО: Сохраняем саму базу НзП!
         ThisWorkbook.Save ' Сохраняем пульт, чтобы он запомнил очистку полей
         
-        wsP.Unprotect
+        wsP.Unprotect Password:=""
         wsP.Range("PZ_ItemCode, PZ_DeptCode, PZ_Num").ClearContents
-        wsP.Protect
+        wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
         Application.ScreenUpdating = True
         
         Application.StatusBar = "MES: ПЗ " & pzNum & " успешно записан"
