@@ -59,7 +59,6 @@ Sub Show_Ch_Hint(ByVal deptName As String)
         Application.StatusBar = "MES: Код для цеха '" & deptName & "' не найден"
     End If
     wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
-    ResetFindDialog
 End Sub
 
 ' =========================================================

@@ -76,7 +76,6 @@ Sub PZ_Teleport()
             MsgBox "По номеру ЗВР (" & zvrVal & ") найдены дополнительные строки в основной таблице." & vbCrLf & "Номера строк: " & rowList, vbInformation, "Дополнительный поиск по ЗВР"
         End If
     End If
-    ResetFindDialog
 End Sub
 
 Sub PZ_ProcessRow()
@@ -118,15 +117,4 @@ Sub UpdateSearchHistory(ByVal newVal As String)
     histRange.Cells(1, 1).Value = newVal
     wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
     Application.EnableEvents = True
-End Sub
-
-' --- ВОССТАНОВЛЕНИЕ НАСТРОЕК ПОИСКА (Ctrl+F) ---
-Sub ResetFindDialog()
-    Dim ws As Worksheet: Set ws = ActiveSheet
-    If ws Is Nothing Then Exit Sub
-    Dim dummy As Range
-    ' Делаем пустой поиск с параметром xlPart, чтобы сбросить "Ячейка целиком"
-    On Error Resume Next
-    Set dummy = ws.Cells.Find(What:="", LookIn:=xlValues, LookAt:=xlPart, SearchOrder:=xlByRows, MatchCase:=False)
-    On Error GoTo 0
 End Sub
