@@ -27,9 +27,9 @@ Sub PZ_Teleport()
     
     Dim idx As Long: idx = val(wsP.Range("PZ_TeleportIdx").Value) + 1
     If idx > ord.Rows.Count Then idx = 1
-    wsP.Unprotect Password:=""
+    wsP.Unprotect
     wsP.Range("PZ_TeleportIdx").Value = idx
-    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+    wsP.Protect
     
     Dim targetRow As Long: targetRow = ord.Rows(idx)
     Dim wsB As Worksheet: Set wsB = ord.BaseSheet
@@ -99,7 +99,7 @@ Sub UpdateSearchHistory(ByVal newVal As String)
     If newVal = "" Or newVal = "Не найден" Or newVal = "Не найдена" Then Exit Sub
     
     Application.EnableEvents = False
-    wsP.Unprotect Password:=""
+    wsP.Unprotect
     
     Dim mIdx As Variant
     mIdx = Application.Match(newVal, histRange, 0)
@@ -115,6 +115,6 @@ Sub UpdateSearchHistory(ByVal newVal As String)
     End If
     
     histRange.Cells(1, 1).Value = newVal
-    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+    wsP.Protect
     Application.EnableEvents = True
 End Sub
