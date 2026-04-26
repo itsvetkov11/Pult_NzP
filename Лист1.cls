@@ -73,7 +73,7 @@ Sub SearchByZVR(ByVal Target As Range, tbl As ListObject)
         Me.Range("PZ_SearchOrder").Value = "Не найден"
     End If
     
-    tbl.DataBodyRange.Find What:="", LookAt:=xlPart
+    ResetFindDialog
     Application.EnableEvents = True
 End Sub
 
@@ -97,6 +97,6 @@ Sub SearchByOrder(ByVal Target As Range, tbl As ListObject)
         Me.Range("PZ_SearchZVR").Value = "Не найдена"
     End If
     
-    tbl.DataBodyRange.Find What:="", LookAt:=xlPart
+    ResetFindDialog
     Application.EnableEvents = True
 End Sub

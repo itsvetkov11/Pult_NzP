@@ -5,13 +5,13 @@ Sub Clear_Pulse()
     Dim ws As Worksheet: Set ws = ThisWorkbook.Sheets("PZ_Control")
     
     Application.EnableEvents = False
-    ws.Unprotect
+    ws.Unprotect Password:=""
     
     ' Чистим ВСЕ блоки исключительно по именам!
     ws.Range("PZ_OrderNum, PZ_OrderPref, PZ_Dept, PZ_WorkType, PZ_Extra").ClearContents
     ws.Range("PZ_ItemCode, PZ_DeptCode, PZ_Num").ClearContents
     ws.Range("PZ_SearchZVR, PZ_SearchOrder, PZ_SearchClient").ClearContents
-    ws.Protect
+    ws.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
     
     Application.StatusBar = False
     Application.EnableEvents = True

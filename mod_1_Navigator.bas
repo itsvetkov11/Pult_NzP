@@ -27,9 +27,9 @@ Sub PZ_Teleport()
     
     Dim idx As Long: idx = val(wsP.Range("PZ_TeleportIdx").Value) + 1
     If idx > ord.Rows.Count Then idx = 1
-    wsP.Unprotect
+    wsP.Unprotect Password:=""
     wsP.Range("PZ_TeleportIdx").Value = idx
-    wsP.Protect
+    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
     
     Dim targetRow As Long: targetRow = ord.Rows(idx)
     Dim wsB As Worksheet: Set wsB = ord.BaseSheet
@@ -76,6 +76,7 @@ Sub PZ_Teleport()
             MsgBox "По номеру ЗВР (" & zvrVal & ") найдены дополнительные строки в основной таблице." & vbCrLf & "Номера строк: " & rowList, vbInformation, "Дополнительный поиск по ЗВР"
         End If
     End If
+    ResetFindDialog
 End Sub
 
 Sub PZ_ProcessRow()
@@ -99,7 +100,7 @@ Sub UpdateSearchHistory(ByVal newVal As String)
     If newVal = "" Or newVal = "Не найден" Or newVal = "Не найдена" Then Exit Sub
     
     Application.EnableEvents = False
-    wsP.Unprotect
+    wsP.Unprotect Password:=""
     
     Dim mIdx As Variant
     mIdx = Application.Match(newVal, histRange, 0)
@@ -115,6 +116,17 @@ Sub UpdateSearchHistory(ByVal newVal As String)
     End If
     
     histRange.Cells(1, 1).Value = newVal
-    wsP.Protect
+    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
     Application.EnableEvents = True
+End Sub
+
+' --- ВОССТАНОВЛЕНИЕ НАСТРОЕК ПОИСКА (Ctrl+F) ---
+Sub ResetFindDialog()
+    Dim ws As Worksheet: Set ws = ActiveSheet
+    If ws Is Nothing Then Exit Sub
+    Dim dummy As Range
+    ' Делаем пустой поиск с параметром xlPart, чтобы сбросить "Ячейка целиком"
+    On Error Resume Next
+    Set dummy = ws.Cells.Find(What:="", LookIn:=xlValues, LookAt:=xlPart, SearchOrder:=xlByRows, MatchCase:=False)
+    On Error GoTo 0
 End Sub

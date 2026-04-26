@@ -230,7 +230,7 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
         End With
     End With
     
-    wsP.Unprotect
+    wsP.Unprotect Password:=""
     wsP.Range("PZ_ItemCode").Value = Me.ItemCode
     wsB.Parent.Save
     
@@ -433,12 +433,12 @@ Sub AddSection(deptName As String, workDesc As String)
     ForceFocus wsB, lastSubOrderRow + 1 ' Фокус на добавленной строке
     
     ' ЗАПИСЬ ДЛЯ УМНОГО UNDO
-    wsP.Unprotect
+    wsP.Unprotect Password:=""
     wsP.Range("UNDO_Row").Value = lastSubOrderRow + 1
     wsP.Range("UNDO_WB").Value = wsB.Parent.Name
     wsP.Range("UNDO_ID").Value = targetFullName
     wsP.Range("UNDO_Dept").Value = deptName
-    wsP.Protect
+    wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
 End Sub
 
 ' =========================================================
