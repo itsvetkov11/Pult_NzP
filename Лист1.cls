@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Ëèñò1"
+Attribute VB_Name = "Ğ›Ğ¸ÑÑ‚1"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -18,32 +18,32 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     If tbl Is Nothing Then Exit Sub
     On Error GoTo CleanExit
 
-    ' --- À. ÂÛÁÎĞ ÈÇ ÈÑÒÎĞÈÈ (Òåëåïîğò - B2 îñòàâëÿåì êàê åñòü) ---
+    ' --- Ğ. Ğ’Ğ«Ğ‘ĞĞ  Ğ˜Ğ— Ğ˜Ğ¡Ğ¢ĞĞ Ğ˜Ğ˜ (Ğ¢ĞµĞ»ĞµĞ¿Ğ¾Ñ€Ñ‚ - B2 Ğ¾ÑÑ‚Ğ°Ğ²Ğ»ÑĞµĞ¼ ĞºĞ°Ğº ĞµÑÑ‚ÑŒ) ---
     If Not Intersect(Target, Me.Range("B2")) Is Nothing Then
         If Me.Range("B2").Value <> "" Then
             Application.EnableEvents = False
             UpdateSearchHistory Me.Range("B2").Value
-            ' Ïåğåäàåì çàêàç â ïîëå ïîèñêà ïî ÈÌÅÍÈ
+            ' ĞŸĞµÑ€ĞµĞ´Ğ°ĞµĞ¼ Ğ·Ğ°ĞºĞ°Ğ· Ğ² Ğ¿Ğ¾Ğ»Ğµ Ğ¿Ğ¾Ğ¸ÑĞºĞ° Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞ˜
             Me.Range("PZ_SearchOrder").Value = Me.Range("B2").Value
             Application.EnableEvents = True
             SearchByOrder Me.Range("PZ_SearchOrder"), tbl
         End If
     End If
 
-    ' --- Á. ÏÎÈÑÊ ÏÎ ÇÂĞ (Ğàáîòàåò ïî ÈÌÅÍÈ) ---
+    ' --- Ğ‘. ĞŸĞĞ˜Ğ¡Ğš ĞŸĞ Ğ—Ğ’Ğ  (Ğ Ğ°Ğ±Ğ¾Ñ‚Ğ°ĞµÑ‚ Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞ˜) ---
     If Not Intersect(Target, Me.Range("PZ_SearchZVR")) Is Nothing Then
         SearchByZVR Target, tbl
     End If
 
-    ' --- Â. ÏÎÈÑÊ ÏÎ ÇÀÊÀÇÓ (Ğàáîòàåò ïî ÈÌÅÍÈ) ---
+    ' --- Ğ’. ĞŸĞĞ˜Ğ¡Ğš ĞŸĞ Ğ—ĞĞšĞĞ—Ğ£ (Ğ Ğ°Ğ±Ğ¾Ñ‚Ğ°ĞµÑ‚ Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞ˜) ---
     If Not Intersect(Target, Me.Range("PZ_SearchOrder")) Is Nothing Then
         SearchByOrder Target, tbl
     End If
     
-    ' --- Ã. ÀÂÒÎ-ÏĞÅÔÈÊÑ "ÔÊ" (Ğàáîòàåò ïî ÈÌÅÍÈ PZ_OrderNum) ---
+    ' --- Ğ“. ĞĞ’Ğ¢Ğ-ĞŸĞ Ğ•Ğ¤Ğ˜ĞšĞ¡ "Ğ¤Ğš" (Ğ Ğ°Ğ±Ğ¾Ñ‚Ğ°ĞµÑ‚ Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞ˜ PZ_OrderNum) ---
     If Not Intersect(Target, Me.Range("PZ_OrderNum")) Is Nothing Then
         Application.EnableEvents = False
-        If Right(Target.Text, 1) = "-" Then Me.Range("PZ_OrderPref").Value = "ÔÊ"
+        If Right(Target.Text, 1) = "-" Then Me.Range("PZ_OrderPref").Value = "Ğ¤Ğš"
         Application.EnableEvents = True
     End If
 
@@ -51,14 +51,14 @@ CleanExit:
     Application.EnableEvents = True
 End Sub
 
-' --- ÂÑÏÎÌÎÃÀÒÅËÜÍÛÅ ÏÎÄÏĞÎÃĞÀÌÌÛ (Ïîèñê) ---
+' --- Ğ’Ğ¡ĞŸĞĞœĞĞ“ĞĞ¢Ğ•Ğ›Ğ¬ĞĞ«Ğ• ĞŸĞĞ”ĞŸĞ ĞĞ“Ğ ĞĞœĞœĞ« (ĞŸĞ¾Ğ¸ÑĞº) ---
 
 Sub SearchByZVR(ByVal Target As Range, tbl As ListObject)
     Dim sSearch As String: sSearch = Trim(Target.Text)
-    Dim foundRow As Range: If sSearch = "" Or sSearch = "Íå íàéäåíà" Then Exit Sub
+    Dim foundRow As Range: If sSearch = "" Or sSearch = "ĞĞµ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½Ğ°" Then Exit Sub
     
     Application.EnableEvents = False
-    Me.Range("PZ_SearchOrder, PZ_SearchClient").ClearContents ' ×èñòèì ïî ÈÌÅÍÀÌ
+    Me.Range("PZ_SearchOrder, PZ_SearchClient").ClearContents ' Ğ§Ğ¸ÑÑ‚Ğ¸Ğ¼ Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞĞœ
     
     Set foundRow = tbl.ListColumns(1).DataBodyRange.Find(What:=sSearch, LookIn:=xlValues, LookAt:=xlWhole)
     If foundRow Is Nothing And IsNumeric(sSearch) Then
@@ -70,7 +70,7 @@ Sub SearchByZVR(ByVal Target As Range, tbl As ListObject)
         Me.Range("PZ_SearchClient").Value = foundRow.Offset(0, 2).Value
         UpdateSearchHistory Me.Range("PZ_SearchOrder").Value
     Else
-        Me.Range("PZ_SearchOrder").Value = "Íå íàéäåí"
+        Me.Range("PZ_SearchOrder").Value = "ĞĞµ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½"
     End If
     
     ResetFindDialog
@@ -79,10 +79,10 @@ End Sub
 
 Sub SearchByOrder(ByVal Target As Range, tbl As ListObject)
     Dim sSearch As String: sSearch = Trim(Target.Text)
-    Dim foundRow As Range: If sSearch = "" Or sSearch = "Íå íàéäåí" Then Exit Sub
+    Dim foundRow As Range: If sSearch = "" Or sSearch = "ĞĞµ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½" Then Exit Sub
     
     Application.EnableEvents = False
-    Me.Range("PZ_SearchZVR, PZ_SearchClient").ClearContents ' ×èñòèì ïî ÈÌÅÍÀÌ
+    Me.Range("PZ_SearchZVR, PZ_SearchClient").ClearContents ' Ğ§Ğ¸ÑÑ‚Ğ¸Ğ¼ Ğ¿Ğ¾ Ğ˜ĞœĞ•ĞĞĞœ
     UpdateSearchHistory sSearch
     
     Set foundRow = tbl.ListColumns(2).DataBodyRange.Find(What:=sSearch, LookIn:=xlValues, LookAt:=xlWhole)
@@ -94,7 +94,7 @@ Sub SearchByOrder(ByVal Target As Range, tbl As ListObject)
         Me.Range("PZ_SearchZVR").Value = foundRow.Offset(0, -1).Value
         Me.Range("PZ_SearchClient").Value = foundRow.Offset(0, 1).Value
     Else
-        Me.Range("PZ_SearchZVR").Value = "Íå íàéäåíà"
+        Me.Range("PZ_SearchZVR").Value = "ĞĞµ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½Ğ°"
     End If
     
     ResetFindDialog
