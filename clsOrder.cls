@@ -31,7 +31,7 @@ Private Sub Class_Initialize()
 End Sub
 
 ' =========================================================
-' МАГИЯ ПРОРИСОВКИ И ФОКУСА НА СТРОКЕ
+' РњРђР“РРЇ РџР РћР РРЎРћР’РљР Р Р¤РћРљРЈРЎРђ РќРђ РЎРўР РћРљР•
 ' =========================================================
 Private Sub ForceFocus(ws As Worksheet, targetRow As Long)
     On Error Resume Next
@@ -39,16 +39,16 @@ Private Sub ForceFocus(ws As Worksheet, targetRow As Long)
     ws.Activate
     ws.Cells(targetRow, 15).Select
     With ActiveWindow
-        .ScrollRow = targetRow ' Прижимаем строку к шапке
-        .SmallScroll Down:=1: .SmallScroll Up:=1 ' Микро-скролл для графики
+        .ScrollRow = targetRow ' РџСЂРёР¶РёРјР°РµРј СЃС‚СЂРѕРєСѓ Рє С€Р°РїРєРµ
+        .SmallScroll Down:=1: .SmallScroll Up:=1 ' РњРёРєСЂРѕ-СЃРєСЂРѕР»Р» РґР»СЏ РіСЂР°С„РёРєРё
     End With
-    ' Эмуляция переключения окон (Alt+Tab эффект)
+    ' Р­РјСѓР»СЏС†РёСЏ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РѕРєРѕРЅ (Alt+Tab СЌС„С„РµРєС‚)
     AppActivate ws.Parent.Name
     DoEvents
 End Sub
 
 ' =========================================================
-' ПОИСК (ОРИГИНАЛ v6.0)
+' РџРћРРЎРљ (РћР РР“РРќРђР› v6.0)
 ' =========================================================
 Sub InitializeSearch(ByVal term As String)
     Dim wsB As Worksheet: Set wsB = Me.BaseSheet
@@ -97,18 +97,18 @@ Sub LoadFromRegistry()
     Dim r As Range, pref As String, searchDept As String
     
     searchDept = Me.Department
-    If searchDept = "ЦПМ-4" Then searchDept = "ЦПМ-2"
+    If searchDept = "Р¦РџРњ-4" Then searchDept = "Р¦РџРњ-2"
     
     Dim isServiceDept As Boolean
-    isServiceDept = Not IsError(Application.Match(searchDept, Array("0", "ВФ", "КФ", "БФ", "Сторонние"), 0))
+    isServiceDept = Not IsError(Application.Match(searchDept, Array("0", "Р’Р¤", "РљР¤", "Р‘Р¤", "РЎС‚РѕСЂРѕРЅРЅРёРµ"), 0))
     
-    If LCase(Me.WorkType) = "услуги" Or isServiceDept Then
+    If LCase(Me.WorkType) = "СѓСЃР»СѓРіРё" Or isServiceDept Then
         Me.ItemCode = "32-000000-00004"
-        Me.Description = "Услуги производственно-технического назначения"
+        Me.Description = "РЈСЃР»СѓРіРё РїСЂРѕРёР·РІРѕРґСЃС‚РІРµРЅРЅРѕ-С‚РµС…РЅРёС‡РµСЃРєРѕРіРѕ РЅР°Р·РЅР°С‡РµРЅРёСЏ"
         Exit Sub
     End If
     
-    pref = IIf(LCase(Me.WorkType) = "до", "32-291", "32-282")
+    pref = IIf(LCase(Me.WorkType) = "РґРѕ", "32-291", "32-282")
     
     For Each r In tbl.ListColumns(1).DataBodyRange
         If Left(r.Value, 6) = pref Then
@@ -123,7 +123,7 @@ Sub LoadFromRegistry()
 End Sub
 
 ' =========================================================
-' СОЗДАНИЕ СТРОКИ (+ ДОБАВЛЕН ФОКУС И СОХРАНЕНИЕ)
+' РЎРћР—Р”РђРќРР• РЎРўР РћРљР (+ Р”РћР‘РђР’Р›Р•Рќ Р¤РћРљРЈРЎ Р РЎРћРҐР РђРќР•РќРР•)
 ' =========================================================
 Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     Dim wsB As Worksheet: Set wsB = Me.BaseSheet
@@ -132,9 +132,9 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     
     If wsB Is Nothing Then Exit Sub
     
-    ' --- БРОНЕЖИЛЕТ ОТ READ-ONLY ---
+    ' --- Р‘Р РћРќР•Р–РР›Р•Рў РћРў READ-ONLY ---
     If wsB.Parent.ReadOnly Then
-        MsgBox "База НзП открыта 'Только для чтения'! (Нормально зайди в таблицу, нормально будет!)))." & vbCrLf & "Внесение изменений заблокировано.", vbCritical, "MES: Ошибка доступа"
+        MsgBox "Р‘Р°Р·Р° РќР·Рџ РѕС‚РєСЂС‹С‚Р° 'РўРѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ'! (РќРѕСЂРјР°Р»СЊРЅРѕ Р·Р°Р№РґРё РІ С‚Р°Р±Р»РёС†Сѓ, РЅРѕСЂРјР°Р»СЊРЅРѕ Р±СѓРґРµС‚!)))." & vbCrLf & "Р’РЅРµСЃРµРЅРёРµ РёР·РјРµРЅРµРЅРёР№ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРѕ.", vbCritical, "MES: РћС€РёР±РєР° РґРѕСЃС‚СѓРїР°"
         Exit Sub
     End If
     ' -------------------------------
@@ -144,9 +144,9 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     
     Dim searchPrefix As String
     Select Case LCase(Me.WorkType)
-        Case "до":      searchPrefix = "32-291"
-        Case "но":      searchPrefix = "32-282"
-        Case "услуги":  searchPrefix = "32-000"
+        Case "РґРѕ":      searchPrefix = "32-291"
+        Case "РЅРѕ":      searchPrefix = "32-282"
+        Case "СѓСЃР»СѓРіРё":  searchPrefix = "32-000"
         Case Else:      searchPrefix = "32-282"
     End Select
 
@@ -173,11 +173,11 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
         fullName = fullName & " " & Me.Department
     End If
     
-    ' Проверка на дубликат + ТЕЛЕПОРТ К ОШИБКЕ
+    ' РџСЂРѕРІРµСЂРєР° РЅР° РґСѓР±Р»РёРєР°С‚ + РўР•Р›Р•РџРћР Рў Рљ РћРЁРР‘РљР•
     For i = 2 To lastR
         If Trim(wsB.Cells(i, 15).Text) = fullName And Trim(wsB.Cells(i, 7).Text) = deptName Then
-            MsgBox "Ошибка! Участок '" & deptName & "' уже добавлен в заказ " & fullName & "!", 48, "Дубликат"
-            ForceFocus wsB, i ' Фокусируемся на дубликате
+            MsgBox "РћС€РёР±РєР°! РЈС‡Р°СЃС‚РѕРє '" & deptName & "' СѓР¶Рµ РґРѕР±Р°РІР»РµРЅ РІ Р·Р°РєР°Р· " & fullName & "!", 48, "Р”СѓР±Р»РёРєР°С‚"
+            ForceFocus wsB, i ' Р¤РѕРєСѓСЃРёСЂСѓРµРјСЃСЏ РЅР° РґСѓР±Р»РёРєР°С‚Рµ
             Exit Sub
         End If
     Next i
@@ -209,8 +209,8 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     
     With wsB
         .Cells(targetR, 2).Value = ""
-        .Cells(targetR, 3).Value = "МЧ1"
-        .Cells(targetR, 4).Value = "Не выпущено"
+        .Cells(targetR, 3).Value = "РњР§1"
+        .Cells(targetR, 4).Value = "РќРµ РІС‹РїСѓС‰РµРЅРѕ"
         .Cells(targetR, 5).Value = Me.ItemCode
         .Cells(targetR, 6).Value = Me.Description
         .Cells(targetR, 7).Value = deptName
@@ -220,7 +220,7 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
         .Cells(targetR, 16).Value = workDesc
         
         With .Cells(targetR, 17)
-            .Value = "списание": .Font.Color = vbRed
+            .Value = "СЃРїРёСЃР°РЅРёРµ": .Font.Color = vbRed
         End With
         
         .Cells(targetR, 21).Value = ""
@@ -234,13 +234,13 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     wsP.Range("PZ_ItemCode").Value = Me.ItemCode
     wsB.Parent.Save
     
-    ' СИНХРОНИЗАЦИЯ С ОБЩЕЙ БАЗОЙ
+    ' РЎРРќРҐР РћРќРР—РђР¦РРЇ РЎ РћР‘Р©Р•Р™ Р‘РђР—РћР™
     wsB.Parent.Save
     
     Application.ScreenUpdating = True
-    ForceFocus wsB, targetR ' Фокус на созданной строке
+    ForceFocus wsB, targetR ' Р¤РѕРєСѓСЃ РЅР° СЃРѕР·РґР°РЅРЅРѕР№ СЃС‚СЂРѕРєРµ
     
-    ' ЗАПИСЬ ДЛЯ УМНОГО UNDO
+    ' Р—РђРџРРЎР¬ Р”Р›РЇ РЈРњРќРћР“Рћ UNDO
     wsP.Range("UNDO_Row").Value = targetR
     wsP.Range("UNDO_WB").Value = wsB.Parent.Name
     wsP.Range("UNDO_ID").Value = fullName
@@ -248,7 +248,7 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
 End Sub
 
 ' =========================================================
-' ПОКРАСКА (+ ДОБАВЛЕНЫ ПОЛНЫЕ РАМКИ СО ВСЕХ СТОРОН)
+' РџРћРљР РђРЎРљРђ (+ Р”РћР‘РђР’Р›Р•РќР« РџРћР›РќР«Р• Р РђРњРљР РЎРћ Р’РЎР•РҐ РЎРўРћР РћРќ)
 ' =========================================================
 Sub ApplyStyling()
     If Rows.Count = 0 Then Exit Sub
@@ -256,11 +256,11 @@ Sub ApplyStyling()
     Dim wsP As Worksheet: Set wsP = ThisWorkbook.Sheets("PZ_Control")
     Dim f2 As Range: Set f2 = wsP.Range("PZ_StyleColor")
     
-    If wsB Is Nothing Then Exit Sub ' Добавим на всякий случай
+    If wsB Is Nothing Then Exit Sub ' Р”РѕР±Р°РІРёРј РЅР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№
     
-    ' --- БРОНЕЖИЛЕТ ОТ READ-ONLY ---
+    ' --- Р‘Р РћРќР•Р–РР›Р•Рў РћРў READ-ONLY ---
     If wsB.Parent.ReadOnly Then
-        MsgBox "База НзП открыта 'Только для чтения'! Покраска заблокирована.", vbCritical, "MES: Ошибка доступа"
+        MsgBox "Р‘Р°Р·Р° РќР·Рџ РѕС‚РєСЂС‹С‚Р° 'РўРѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ'! РџРѕРєСЂР°СЃРєР° Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅР°.", vbCritical, "MES: РћС€РёР±РєР° РґРѕСЃС‚СѓРїР°"
         Exit Sub
     End If
     ' -------------------------------
@@ -303,7 +303,7 @@ Sub ApplyStyling()
             With wsB.Range(wsB.Cells(minR, 15), wsB.Cells(maxR, 15))
                 .Borders.LineStyle = xlNone
                 
-                ' Рисуем рамку по всему периметру
+                ' Р РёСЃСѓРµРј СЂР°РјРєСѓ РїРѕ РІСЃРµРјСѓ РїРµСЂРёРјРµС‚СЂСѓ
                 For Each edge In Array(xlEdgeLeft, xlEdgeRight, xlEdgeTop, xlEdgeBottom)
                     With .Borders(edge)
                         .LineStyle = xlContinuous
@@ -312,7 +312,7 @@ Sub ApplyStyling()
                     End With
                 Next edge
                 
-                ' Тонкие линии внутри блока (если строк больше одной)
+                ' РўРѕРЅРєРёРµ Р»РёРЅРёРё РІРЅСѓС‚СЂРё Р±Р»РѕРєР° (РµСЃР»Рё СЃС‚СЂРѕРє Р±РѕР»СЊС€Рµ РѕРґРЅРѕР№)
                 If minR < maxR Then
                     With .Borders(xlInsideHorizontal)
                         .LineStyle = xlContinuous
@@ -323,13 +323,13 @@ Sub ApplyStyling()
         End If
     Next i
     
-    ' СИНХРОНИЗАЦИЯ С ОБЩЕЙ БАЗОЙ
+    ' РЎРРќРҐР РћРќРР—РђР¦РРЇ РЎ РћР‘Р©Р•Р™ Р‘РђР—РћР™
     wsB.Parent.Save
-    ForceFocus wsB, minR ' Фокус на покрашенном блоке
+    ForceFocus wsB, minR ' Р¤РѕРєСѓСЃ РЅР° РїРѕРєСЂР°С€РµРЅРЅРѕРј Р±Р»РѕРєРµ
 End Sub
 
 ' =========================================================
-' ДОБАВЛЕНИЕ УЧАСТКА (+ ДОБАВЛЕН ФОКУС И СОХРАНЕНИЕ)
+' Р”РћР‘РђР’Р›Р•РќРР• РЈР§РђРЎРўРљРђ (+ Р”РћР‘РђР’Р›Р•Рќ Р¤РћРљРЈРЎ Р РЎРћРҐР РђРќР•РќРР•)
 ' =========================================================
 Sub AddSection(deptName As String, workDesc As String)
     If Rows.Count = 0 Then Exit Sub
@@ -338,9 +338,9 @@ Sub AddSection(deptName As String, workDesc As String)
     
     If wsB Is Nothing Then Exit Sub
     
-    ' --- БРОНЕЖИЛЕТ ОТ READ-ONLY ---
+    ' --- Р‘Р РћРќР•Р–РР›Р•Рў РћРў READ-ONLY ---
     If wsB.Parent.ReadOnly Then
-        MsgBox "База НзП открыта 'Только для чтения'! Добавление участка заблокирована.", vbCritical, "MES: Ошибка доступа"
+        MsgBox "Р‘Р°Р·Р° РќР·Рџ РѕС‚РєСЂС‹С‚Р° 'РўРѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ'! Р”РѕР±Р°РІР»РµРЅРёРµ СѓС‡Р°СЃС‚РєР° Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅР°.", vbCritical, "MES: РћС€РёР±РєР° РґРѕСЃС‚СѓРїР°"
         Exit Sub
     End If
     ' -------------------------------
@@ -360,22 +360,22 @@ Sub AddSection(deptName As String, workDesc As String)
         targetFullName = colUnique(1)
     Else
         Dim promptStr As String
-        promptStr = "Найдено несколько цехов для этого заказа. Куда добавляем участок?" & vbCrLf & vbCrLf
+        promptStr = "РќР°Р№РґРµРЅРѕ РЅРµСЃРєРѕР»СЊРєРѕ С†РµС…РѕРІ РґР»СЏ СЌС‚РѕРіРѕ Р·Р°РєР°Р·Р°. РљСѓРґР° РґРѕР±Р°РІР»СЏРµРј СѓС‡Р°СЃС‚РѕРє?" & vbCrLf & vbCrLf
         Dim idx As Integer
         For idx = 1 To colUnique.Count
             promptStr = promptStr & idx & " - " & colUnique(idx) & vbCrLf
         Next idx
-        promptStr = promptStr & vbCrLf & "Введите НОМЕР нужного варианта (1-" & colUnique.Count & "):"
+        promptStr = promptStr & vbCrLf & "Р’РІРµРґРёС‚Рµ РќРћРњР•Р  РЅСѓР¶РЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° (1-" & colUnique.Count & "):"
         
         Dim choice As String
-        choice = InputBox(promptStr, "MES: Уточнение адреса")
+        choice = InputBox(promptStr, "MES: РЈС‚РѕС‡РЅРµРЅРёРµ Р°РґСЂРµСЃР°")
         
         If choice = "" Or Not IsNumeric(choice) Then
-            Application.StatusBar = "MES: Добавление отменено."
+            Application.StatusBar = "MES: Р”РѕР±Р°РІР»РµРЅРёРµ РѕС‚РјРµРЅРµРЅРѕ."
             Exit Sub
         End If
         If val(choice) < 1 Or val(choice) > colUnique.Count Then
-            MsgBox "Неверный номер!", 16: Exit Sub
+            MsgBox "РќРµРІРµСЂРЅС‹Р№ РЅРѕРјРµСЂ!", 16: Exit Sub
         End If
         targetFullName = colUnique(val(choice))
     End If
@@ -395,12 +395,12 @@ Sub AddSection(deptName As String, workDesc As String)
     Next i
     
     If existingR > 0 Then
-        MsgBox "Участок '" & deptName & "' уже есть в заказе " & targetFullName & "!", 64
-        ForceFocus wsB, existingR ' ТЕЛЕПОРТ К ОШИБКЕ
+        MsgBox "РЈС‡Р°СЃС‚РѕРє '" & deptName & "' СѓР¶Рµ РµСЃС‚СЊ РІ Р·Р°РєР°Р·Рµ " & targetFullName & "!", 64
+        ForceFocus wsB, existingR ' РўР•Р›Р•РџРћР Рў Рљ РћРЁРР‘РљР•
         Exit Sub
     End If
     
-    Dim inHours As Variant: inHours = Application.InputBox("Введите часы:", "Ввод трудозатрат", Type:=2)
+    Dim inHours As Variant: inHours = Application.InputBox("Р’РІРµРґРёС‚Рµ С‡Р°СЃС‹:", "Р’РІРѕРґ С‚СЂСѓРґРѕР·Р°С‚СЂР°С‚", Type:=2)
     If inHours = "False" Or inHours = "" Then Exit Sub
     
     Application.ScreenUpdating = False
@@ -425,14 +425,14 @@ Sub AddSection(deptName As String, workDesc As String)
     Me.InitializeSearch Me.SearchTerm
     Me.ApplyStyling
     
-    ' СИНХРОНИЗАЦИЯ С ОБЩЕЙ БАЗОЙ
+    ' РЎРРќРҐР РћРќРР—РђР¦РРЇ РЎ РћР‘Р©Р•Р™ Р‘РђР—РћР™
     wsB.Parent.Save
     
     Application.ScreenUpdating = True
-    Application.StatusBar = "MES: Участок " & deptName & " добавлен в " & targetFullName
-    ForceFocus wsB, lastSubOrderRow + 1 ' Фокус на добавленной строке
+    Application.StatusBar = "MES: РЈС‡Р°СЃС‚РѕРє " & deptName & " РґРѕР±Р°РІР»РµРЅ РІ " & targetFullName
+    ForceFocus wsB, lastSubOrderRow + 1 ' Р¤РѕРєСѓСЃ РЅР° РґРѕР±Р°РІР»РµРЅРЅРѕР№ СЃС‚СЂРѕРєРµ
     
-    ' ЗАПИСЬ ДЛЯ УМНОГО UNDO
+    ' Р—РђРџРРЎР¬ Р”Р›РЇ РЈРњРќРћР“Рћ UNDO
     wsP.Unprotect Password:=""
     wsP.Range("UNDO_Row").Value = lastSubOrderRow + 1
     wsP.Range("UNDO_WB").Value = wsB.Parent.Name
@@ -442,7 +442,7 @@ Sub AddSection(deptName As String, workDesc As String)
 End Sub
 
 ' =========================================================
-' СБОРКА СТРОК (ОРИГИНАЛ v6.0)
+' РЎР‘РћР РљРђ РЎРўР РћРљ (РћР РР“РРќРђР› v6.0)
 ' =========================================================
 Sub GatherRows()
     Dim wsB As Worksheet: Set wsB = Me.BaseSheet
