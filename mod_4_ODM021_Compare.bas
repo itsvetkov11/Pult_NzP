@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_4_ODM021_Compare"
 Option Explicit
 
-' Главный макрос для сравнения отчета ODM021 с листом НзП
+' Р“Р»Р°РІРЅС‹Р№ РјР°РєСЂРѕСЃ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ РѕС‚С‡РµС‚Р° ODM021 СЃ Р»РёСЃС‚РѕРј РќР·Рџ
 Sub CompareODM021()
     Dim wsSettings As Worksheet
     Dim wsControl As Worksheet
@@ -16,40 +16,40 @@ Sub CompareODM021()
     Dim file As Object
     Dim wbName As String
     
-    ' 1. Получение пути из настроек
+    ' 1. РџРѕР»СѓС‡РµРЅРёРµ РїСѓС‚Рё РёР· РЅР°СЃС‚СЂРѕРµРє
     On Error Resume Next
     Set wsSettings = ThisWorkbook.Sheets("Settings")
     On Error GoTo 0
     
     If wsSettings Is Nothing Then
-        MsgBox "Не найден лист 'Settings' в текущей книге.", vbCritical
+        MsgBox "РќРµ РЅР°Р№РґРµРЅ Р»РёСЃС‚ 'Settings' РІ С‚РµРєСѓС‰РµР№ РєРЅРёРіРµ.", vbCritical
         Exit Sub
     End If
     
     On Error Resume Next
-    folderPath = wsSettings.Range("Путь_ODM021").Value
+    folderPath = wsSettings.Range("РџСѓС‚СЊ_ODM021").Value
     On Error GoTo 0
     
     If folderPath = "" Then
-        ' Попытка найти по тексту, если именованный диапазон не сработал
+        ' РџРѕРїС‹С‚РєР° РЅР°Р№С‚Рё РїРѕ С‚РµРєСЃС‚Сѓ, РµСЃР»Рё РёРјРµРЅРѕРІР°РЅРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ РЅРµ СЃСЂР°Р±РѕС‚Р°Р»
         Dim foundCell As Range
-        Set foundCell = wsSettings.Columns("H").Find(What:="Путь_ODM021", LookIn:=xlValues, LookAt:=xlWhole)
+        Set foundCell = wsSettings.Columns("H").Find(What:="РџСѓС‚СЊ_ODM021", LookIn:=xlValues, LookAt:=xlWhole)
         If Not foundCell Is Nothing Then
             folderPath = foundCell.Offset(0, 1).Value
         End If
     End If
     
     If folderPath = "" Then
-        MsgBox "Не удалось найти путь к папке с отчетами ODM021 в настройках.", vbCritical
+        MsgBox "РќРµ СѓРґР°Р»РѕСЃСЊ РЅР°Р№С‚Рё РїСѓС‚СЊ Рє РїР°РїРєРµ СЃ РѕС‚С‡РµС‚Р°РјРё ODM021 РІ РЅР°СЃС‚СЂРѕР№РєР°С….", vbCritical
         Exit Sub
     End If
     
     If Right(folderPath, 1) <> "\" Then folderPath = folderPath & "\"
     
-    ' 2. Поиск последнего файла
+    ' 2. РџРѕРёСЃРє РїРѕСЃР»РµРґРЅРµРіРѕ С„Р°Р№Р»Р°
     Set fso = CreateObject("Scripting.FileSystemObject")
     If Not fso.FolderExists(folderPath) Then
-        MsgBox "Папка " & folderPath & " не существует.", vbCritical
+        MsgBox "РџР°РїРєР° " & folderPath & " РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.", vbCritical
         Exit Sub
     End If
     
@@ -57,7 +57,7 @@ Sub CompareODM021()
     maxDate = DateSerial(1900, 1, 1)
     
     For Each file In folder.Files
-        If InStr(1, file.Name, "ФА_ODM021", vbTextCompare) > 0 And (Right(file.Name, 4) = ".xls" Or Right(file.Name, 5) = ".xlsx") Then
+        If InStr(1, file.Name, "Р¤Рђ_ODM021", vbTextCompare) > 0 And (Right(file.Name, 4) = ".xls" Or Right(file.Name, 5) = ".xlsx") Then
             If file.DateLastModified > maxDate Then
                 maxDate = file.DateLastModified
                 latestFile = file.Path
@@ -66,17 +66,17 @@ Sub CompareODM021()
     Next file
     
     If latestFile = "" Then
-        MsgBox "В папке " & folderPath & " не найдено отчетов ODM021.", vbExclamation
+        MsgBox "Р’ РїР°РїРєРµ " & folderPath & " РЅРµ РЅР°Р№РґРµРЅРѕ РѕС‚С‡РµС‚РѕРІ ODM021.", vbExclamation
         Exit Sub
     End If
     
-    ' 3. Подключение к базе НзП
+    ' 3. РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ РќР·Рџ
     On Error Resume Next
     Set wsControl = ThisWorkbook.Sheets("PZ_Control")
     On Error GoTo 0
     
     If wsControl Is Nothing Then
-        MsgBox "Не найден лист 'PZ_Control'.", vbCritical
+        MsgBox "РќРµ РЅР°Р№РґРµРЅ Р»РёСЃС‚ 'PZ_Control'.", vbCritical
         Exit Sub
     End If
     
@@ -87,20 +87,20 @@ Sub CompareODM021()
     On Error GoTo 0
     
     If wsNzP Is Nothing Then
-        MsgBox "База НзП (" & wbName & ") не найдена или закрыта! Пожалуйста, откройте базу перед запуском.", vbCritical
+        MsgBox "Р‘Р°Р·Р° РќР·Рџ (" & wbName & ") РЅРµ РЅР°Р№РґРµРЅР° РёР»Рё Р·Р°РєСЂС‹С‚Р°! РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РѕС‚РєСЂРѕР№С‚Рµ Р±Р°Р·Сѓ РїРµСЂРµРґ Р·Р°РїСѓСЃРєРѕРј.", vbCritical
         Exit Sub
     End If
     
     If wsNzP.Parent.ReadOnly Then
-        MsgBox "База НзП открыта 'Только для чтения'! Обновление дат заблокировано.", vbCritical, "MES: Ошибка доступа"
+        MsgBox "Р‘Р°Р·Р° РќР·Рџ РѕС‚РєСЂС‹С‚Р° 'РўРѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ'! РћР±РЅРѕРІР»РµРЅРёРµ РґР°С‚ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРѕ.", vbCritical, "MES: РћС€РёР±РєР° РґРѕСЃС‚СѓРїР°"
         Exit Sub
     End If
     
-    ' 4. Подготовка словаря для быстрого поиска
+    ' 4. РџРѕРґРіРѕС‚РѕРІРєР° СЃР»РѕРІР°СЂСЏ РґР»СЏ Р±С‹СЃС‚СЂРѕРіРѕ РїРѕРёСЃРєР°
     Dim dictNzP As Object
     Set dictNzP = CreateObject("Scripting.Dictionary")
     
-    ' Поиск колонок в НзП (в 1-й строке)
+    ' РџРѕРёСЃРє РєРѕР»РѕРЅРѕРє РІ РќР·Рџ (РІ 1-Р№ СЃС‚СЂРѕРєРµ)
     Dim colNzP_PZ As Long
     Dim colNzP_DateStatus As Long
     Dim colNzP_DateUpdate As Long
@@ -110,19 +110,19 @@ Sub CompareODM021()
     
     Dim c As Long
     For c = 1 To lastColNzP
-        If wsNzP.Cells(1, c).Value = "№ ПЗ" Then colNzP_PZ = c
-        If wsNzP.Cells(1, c).Value = "Дата присвоения статуса" Then colNzP_DateStatus = c
-        If wsNzP.Cells(1, c).Value = "Дата последнего обновления ПЗ" Then colNzP_DateUpdate = c
+        If wsNzP.Cells(1, c).Value = "в„– РџР—" Then colNzP_PZ = c
+        If wsNzP.Cells(1, c).Value = "Р”Р°С‚Р° РїСЂРёСЃРІРѕРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР°" Then colNzP_DateStatus = c
+        If wsNzP.Cells(1, c).Value = "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РџР—" Then colNzP_DateUpdate = c
     Next c
     
     If colNzP_PZ = 0 Then
-        MsgBox "На листе базы 'НзП' не найдена колонка '№ ПЗ' в 1-й строке.", vbCritical
+        MsgBox "РќР° Р»РёСЃС‚Рµ Р±Р°Р·С‹ 'РќР·Рџ' РЅРµ РЅР°Р№РґРµРЅР° РєРѕР»РѕРЅРєР° 'в„– РџР—' РІ 1-Р№ СЃС‚СЂРѕРєРµ.", vbCritical
         Exit Sub
     End If
     
     lastRowNzP = wsNzP.Cells(wsNzP.Rows.Count, colNzP_PZ).End(xlUp).Row
     
-    ' Заполнение словаря
+    ' Р—Р°РїРѕР»РЅРµРЅРёРµ СЃР»РѕРІР°СЂСЏ
     Dim i As Long
     Dim pzVal As String
     For i = 2 To lastRowNzP
@@ -132,26 +132,26 @@ Sub CompareODM021()
         End If
     Next i
     
-    ' 5. Подготовка листа вывода
+    ' 5. РџРѕРґРіРѕС‚РѕРІРєР° Р»РёСЃС‚Р° РІС‹РІРѕРґР°
     On Error Resume Next
-    Set wsReport = ThisWorkbook.Sheets("Отчет_021")
+    Set wsReport = ThisWorkbook.Sheets("РћС‚С‡РµС‚_021")
     On Error GoTo 0
     
     If wsReport Is Nothing Then
         Set wsReport = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
-        wsReport.Name = "Отчет_021"
+        wsReport.Name = "РћС‚С‡РµС‚_021"
     Else
         wsReport.Cells.Clear
     End If
     
-    ' 6. Открытие отчета и сравнение
+    ' 6. РћС‚РєСЂС‹С‚РёРµ РѕС‚С‡РµС‚Р° Рё СЃСЂР°РІРЅРµРЅРёРµ
     Application.ScreenUpdating = False
     Dim wbReport As Workbook
     Set wbReport = Workbooks.Open(latestFile)
     Dim wsRepData As Worksheet
-    Set wsRepData = wbReport.Sheets(1) ' Предполагаем, что данные на первом листе
+    Set wsRepData = wbReport.Sheets(1) ' РџСЂРµРґРїРѕР»Р°РіР°РµРј, С‡С‚Рѕ РґР°РЅРЅС‹Рµ РЅР° РїРµСЂРІРѕРј Р»РёСЃС‚Рµ
     
-    ' Поиск колонок в отчете (в 8 строке)
+    ' РџРѕРёСЃРє РєРѕР»РѕРЅРѕРє РІ РѕС‚С‡РµС‚Рµ (РІ 8 СЃС‚СЂРѕРєРµ)
     Dim colRep_PZ As Long
     Dim colRep_Dept As Long
     Dim colRep_DateStatus As Long
@@ -160,27 +160,27 @@ Sub CompareODM021()
     lastColRep = wsRepData.Cells(8, wsRepData.Columns.Count).End(xlToLeft).Column
     
     For c = 1 To lastColRep
-        If wsRepData.Cells(8, c).Value = "№ ПЗ" Then colRep_PZ = c
-        If wsRepData.Cells(8, c).Value = "Отдел" Then colRep_Dept = c
-        If wsRepData.Cells(8, c).Value = "Дата присвоения статуса" Then colRep_DateStatus = c
-        If wsRepData.Cells(8, c).Value = "Дата последнего обновления ПЗ" Then colRep_DateUpdate = c
+        If wsRepData.Cells(8, c).Value = "в„– РџР—" Then colRep_PZ = c
+        If wsRepData.Cells(8, c).Value = "РћС‚РґРµР»" Then colRep_Dept = c
+        If wsRepData.Cells(8, c).Value = "Р”Р°С‚Р° РїСЂРёСЃРІРѕРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР°" Then colRep_DateStatus = c
+        If wsRepData.Cells(8, c).Value = "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РџР—" Then colRep_DateUpdate = c
     Next c
     
     If colRep_PZ = 0 Then
-        MsgBox "В отчете не найдена колонка '№ ПЗ' в 8-й строке.", vbCritical
+        MsgBox "Р’ РѕС‚С‡РµС‚Рµ РЅРµ РЅР°Р№РґРµРЅР° РєРѕР»РѕРЅРєР° 'в„– РџР—' РІ 8-Р№ СЃС‚СЂРѕРєРµ.", vbCritical
         wbReport.Close SaveChanges:=False
         Application.ScreenUpdating = True
         Exit Sub
     End If
     
     If colRep_Dept = 0 Then
-        MsgBox "В отчете не найдена колонка 'Отдел' в 8-й строке.", vbCritical
+        MsgBox "Р’ РѕС‚С‡РµС‚Рµ РЅРµ РЅР°Р№РґРµРЅР° РєРѕР»РѕРЅРєР° 'РћС‚РґРµР»' РІ 8-Р№ СЃС‚СЂРѕРєРµ.", vbCritical
         wbReport.Close SaveChanges:=False
         Application.ScreenUpdating = True
         Exit Sub
     End If
     
-    ' Копирование шапки
+    ' РљРѕРїРёСЂРѕРІР°РЅРёРµ С€Р°РїРєРё
     wsRepData.Rows(8).Copy Destination:=wsReport.Rows(1)
     
     Dim lastRowRep As Long
@@ -195,16 +195,16 @@ Sub CompareODM021()
     
     For i = 9 To lastRowRep
         deptVal = Trim(CStr(wsRepData.Cells(i, colRep_Dept).Value))
-        ' Фильтрация по отделу
-        If deptVal = "СУ АК" Or deptVal = "КСУ АК" Or deptVal = "Группа ЧПУ" Then
+        ' Р¤РёР»СЊС‚СЂР°С†РёСЏ РїРѕ РѕС‚РґРµР»Сѓ
+        If deptVal = "РЎРЈ РђРљ" Or deptVal = "РљРЎРЈ РђРљ" Or deptVal = "Р“СЂСѓРїРїР° Р§РџРЈ" Then
             pzVal = CStr(wsRepData.Cells(i, colRep_PZ).Value)
             If pzVal <> "" Then
                 If Not dictNzP.Exists(pzVal) Then
-                    ' Строки нет в НзП, копируем в отчет
+                    ' РЎС‚СЂРѕРєРё РЅРµС‚ РІ РќР·Рџ, РєРѕРїРёСЂСѓРµРј РІ РѕС‚С‡РµС‚
                     wsRepData.Rows(i).Copy Destination:=wsReport.Rows(outRow)
                     outRow = outRow + 1
                 Else
-                    ' Строка найдена в НзП - обновляем даты, если колонки найдены
+                    ' РЎС‚СЂРѕРєР° РЅР°Р№РґРµРЅР° РІ РќР·Рџ - РѕР±РЅРѕРІР»СЏРµРј РґР°С‚С‹, РµСЃР»Рё РєРѕР»РѕРЅРєРё РЅР°Р№РґРµРЅС‹
                     nzpRow = dictNzP(pzVal)
                     If colRep_DateStatus > 0 And colNzP_DateStatus > 0 Then
                         wsNzP.Cells(nzpRow, colNzP_DateStatus).Value = wsRepData.Cells(i, colRep_DateStatus).Value
@@ -229,9 +229,9 @@ Sub CompareODM021()
     wsReport.Activate
     Application.ScreenUpdating = True
     
-    MsgBox "Готово! Обработан файл: " & vbCrLf & latestFile & vbCrLf & _
-           "Найдено отсутствующих строк: " & (outRow - 2) & vbCrLf & _
-           "Обновлено дат в базе НзП: " & updatedCount, vbInformation
+    MsgBox "Р“РѕС‚РѕРІРѕ! РћР±СЂР°Р±РѕС‚Р°РЅ С„Р°Р№Р»: " & vbCrLf & latestFile & vbCrLf & _
+           "РќР°Р№РґРµРЅРѕ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‰РёС… СЃС‚СЂРѕРє: " & (outRow - 2) & vbCrLf & _
+           "РћР±РЅРѕРІР»РµРЅРѕ РґР°С‚ РІ Р±Р°Р·Рµ РќР·Рџ: " & updatedCount, vbInformation
     
 End Sub
 
