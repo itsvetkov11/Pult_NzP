@@ -271,10 +271,48 @@ Sub ApplyStyling()
     Dim rNum As Variant, fullName As String
     On Error Resume Next
     For Each rNum In Rows
-        fullName = Trim(wsB.Cells(val(rNum), 15).Text)
+        fullName = Trim(wsB.Cells(Val(rNum), 15).Text)
         colUnique.Add fullName, CStr(fullName)
     Next rNum
     On Error GoTo 0
+    
+    Dim targetFullName As String
+    If colUnique.Count = 1 Then
+        targetFullName = colUnique(1)
+    Else
+        Dim promptStr As String
+        promptStr = "Найдено несколько цехов для заказа. Что красим?" & vbCrLf & vbCrLf
+        Dim idx As Integer
+        For idx = 1 To colUnique.Count
+            promptStr = promptStr & idx & " - " & colUnique(idx) & vbCrLf
+        Next idx
+        promptStr = promptStr & vbCrLf & "Введите НОМЕР нужного варианта (1-" & colUnique.Count & "):"
+        
+        Dim choice As String
+        choice = InputBox(promptStr, "MES: Уточнение адреса")
+        
+        If choice = "" Or Not IsNumeric(choice) Then
+            Application.StatusBar = "MES: Покраска отменена."
+            Exit Sub
+        End If
+        If Val(choice) < 1 Or Val(choice) > colUnique.Count Then
+            MsgBox "Неверный номер!", 16: Exit Sub
+        End If
+        targetFullName = colUnique(Val(choice))
+        
+        ' Фильтруем коллекцию строк, оставляя только выбранный заказ
+        Dim filteredRows As New Collection
+        For Each rNum In Rows
+            If Trim(wsB.Cells(Val(rNum), 15).Text) = targetFullName Then
+                filteredRows.Add rNum
+            End If
+        Next rNum
+        Set Rows = filteredRows
+        
+        ' Обновляем colUnique, чтобы логика рамок ниже работала только для одной группы
+        Set colUnique = New Collection
+        colUnique.Add targetFullName
+    End If
     
     For Each rNum In Rows
         wsB.Cells(val(rNum), 21).Value = wsP.Range("PZ_StyleMark").Value

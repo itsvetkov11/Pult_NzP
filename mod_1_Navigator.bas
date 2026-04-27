@@ -25,6 +25,53 @@ Sub PZ_Teleport()
         MsgBox "Заказ '" & fVal & "' не найден!", 48: Exit Sub
     End If
     
+    Dim wsB As Worksheet: Set wsB = ord.BaseSheet
+    
+    ' --- ЛОГИКА ВЫБОРА УНИКАЛЬНОГО ЗАКАЗА (ТЕЛЕПОРТ) ---
+    Dim colUnique As New Collection
+    Dim rNum As Variant, fullName As String
+    On Error Resume Next
+    For Each rNum In ord.Rows
+        fullName = Trim(wsB.Cells(Val(rNum), 15).Text)
+        colUnique.Add fullName, CStr(fullName)
+    Next rNum
+    On Error GoTo 0
+    
+    Dim targetFullName As String
+    If colUnique.Count = 1 Then
+        targetFullName = colUnique(1)
+    Else
+        Dim promptStr As String
+        promptStr = "Найдено несколько цехов для заказа " & fVal & ". Куда прыгаем?" & vbCrLf & vbCrLf
+        Dim iChoice As Integer
+        For iChoice = 1 To colUnique.Count
+            promptStr = promptStr & iChoice & " - " & colUnique(iChoice) & vbCrLf
+        Next iChoice
+        promptStr = promptStr & vbCrLf & "Введите НОМЕР нужного варианта (1-" & colUnique.Count & "):"
+        
+        Dim choice As String
+        choice = InputBox(promptStr, "MES: Уточнение адреса")
+        
+        If choice = "" Or Not IsNumeric(choice) Then
+            Application.StatusBar = "MES: Телепорт отменен."
+            Exit Sub
+        End If
+        If Val(choice) < 1 Or Val(choice) > colUnique.Count Then
+            MsgBox "Неверный номер!", 16: Exit Sub
+        End If
+        targetFullName = colUnique(Val(choice))
+        
+        ' Фильтруем коллекцию строк, оставляя только выбранный заказ
+        Dim filteredRows As New Collection
+        For Each rNum In ord.Rows
+            If Trim(wsB.Cells(Val(rNum), 15).Text) = targetFullName Then
+                filteredRows.Add rNum
+            End If
+        Next rNum
+        Set ord.Rows = filteredRows
+    End If
+    ' ---------------------------------------------------
+    
     Dim idx As Long: idx = val(wsP.Range("PZ_TeleportIdx").Value) + 1
     If idx > ord.Rows.Count Then idx = 1
     wsP.Unprotect Password:=""
