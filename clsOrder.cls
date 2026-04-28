@@ -245,6 +245,10 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
     wsP.Range("UNDO_WB").Value = wsB.Parent.Name
     wsP.Range("UNDO_ID").Value = fullName
     wsP.Range("UNDO_Dept").Value = deptName
+    ' ВЫВОД НАЗВАНИЯ СБОРКИ НА ПУЛЬТ
+    On Error Resume Next
+    wsP.Range("PZ_CreatedAssembly").Value = fullName
+    On Error GoTo 0
 End Sub
 
 ' =========================================================
@@ -476,6 +480,10 @@ Sub AddSection(deptName As String, workDesc As String)
     wsP.Range("UNDO_WB").Value = wsB.Parent.Name
     wsP.Range("UNDO_ID").Value = targetFullName
     wsP.Range("UNDO_Dept").Value = deptName
+    ' ВЫВОД НАЗВАНИЯ СБОРКИ НА ПУЛЬТ
+    On Error Resume Next
+    wsP.Range("PZ_CreatedAssembly").Value = fullName
+    On Error GoTo 0
     wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
 End Sub
 

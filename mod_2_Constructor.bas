@@ -152,6 +152,10 @@ Sub PZ_SendToBase_Safe()
         
         wsP.Unprotect Password:=""
         wsP.Range("PZ_ItemCode, PZ_DeptCode, PZ_Num").ClearContents
+        ' ОЧИЩАЕМ НАЗВАНИЕ СБОРКИ НА ПУЛЬТЕ ПОСЛЕ УСПЕШНОГО ВБРОСА
+        On Error Resume Next
+        wsP.Range("PZ_CreatedAssembly").ClearContents
+        On Error GoTo 0
         wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
         Application.ScreenUpdating = True
         
@@ -196,6 +200,10 @@ Sub Undo_Last_Action()
         
         ' Стираем память
         wsP.Range("UNDO_Row, UNDO_WB, UNDO_ID, UNDO_Dept").ClearContents
+        ' ОЧИЩАЕМ НАЗВАНИЕ СБОРКИ НА ПУЛЬТЕ ПРИ ОТМЕНЕ
+        On Error Resume Next
+        wsP.Range("PZ_CreatedAssembly").ClearContents
+        On Error GoTo 0
         wsB.Parent.Save
     Else
         MsgBox "Отмена невозможна! Строка была изменена или перемещена.", vbCritical, "MES: Защита"
