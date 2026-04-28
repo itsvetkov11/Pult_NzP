@@ -79,7 +79,7 @@ Sub PZ_Teleport()
     wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
     
     Dim targetRow As Long: targetRow = ord.Rows(idx)
-    Dim wsB As Worksheet: Set wsB = ord.BaseSheet
+    Set wsB = ord.BaseSheet
     
     Application.ScreenUpdating = True
     wsB.Parent.Activate: wsB.Activate
