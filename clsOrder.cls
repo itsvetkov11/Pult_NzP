@@ -169,8 +169,8 @@ Sub CreateNew(ByVal deptName As String, ByVal workDesc As String)
         fullName = foundFullName
     Else
         fullName = Me.ID
-        If Me.ExtraInfo <> "" Then fullName = fullName & " " & Me.ExtraInfo
         fullName = fullName & " " & Me.Department
+        If Me.ExtraInfo <> "" Then fullName = fullName & " " & Me.ExtraInfo
     End If
     
     ' Проверка на дубликат + ТЕЛЕПОРТ К ОШИБКЕ

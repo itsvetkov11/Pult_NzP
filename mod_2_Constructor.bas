@@ -76,6 +76,9 @@ Sub PZ_SendToBase_Safe()
     
     If pzNum = "" Then MsgBox "Введите номер ПЗ!", 48: Exit Sub
     
+    ' Подтягиваем наименование работы по номеру заказа
+    Update_PZ_WorkName wsP.Range("PZ_OrderNum").Text
+    
     ' 2. ПОДКЛЮЧЕНИЕ К БАЗЕ
     Dim wbName As String: wbName = Trim(wsP.Range("PZ_DBName").Text)
     Dim wsB As Worksheet: On Error Resume Next

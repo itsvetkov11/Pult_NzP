@@ -18,6 +18,7 @@ Sub PZ_Teleport()
     If fVal = "" Then MsgBox "Введите номер в поле поиска!", 48: Exit Sub
     
     UpdateSearchHistory fVal
+    Update_PZ_WorkName fVal
     
     Dim ord As clsOrder: Set ord = CurrentOrder
     If ord.Rows.Count = 0 Then
@@ -176,4 +177,49 @@ Sub ResetFindDialog()
     On Error Resume Next
     Set dummy = ws.Cells.Find(What:="", LookIn:=xlValues, LookAt:=xlPart, SearchOrder:=xlByRows, MatchCase:=False)
     On Error GoTo 0
+End Sub
+
+
+' --- ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ: ПОИСК НАИМЕНОВАНИЯ РАБОТЫ В tblZVR_Master ---
+Sub Update_PZ_WorkName(ByVal sSearch As String)
+    Dim wsP As Worksheet: Set wsP = ThisWorkbook.Sheets("PZ_Control")
+    Dim tbl As ListObject, ws As Worksheet
+    For Each ws In ThisWorkbook.Worksheets
+        On Error Resume Next
+        Set tbl = ws.ListObjects("tblZVR_Master")
+        On Error GoTo 0
+        If Not tbl Is Nothing Then Exit For
+    Next ws
+    
+    If tbl Is Nothing Then Exit Sub
+    
+    Dim foundRow As Range
+    ' Ищем по Заказу (столбец 2)
+    Set foundRow = tbl.ListColumns(2).DataBodyRange.Find(What:=sSearch, LookIn:=xlValues, LookAt:=xlWhole)
+    If foundRow Is Nothing And IsNumeric(sSearch) Then
+        Set foundRow = tbl.ListColumns(2).DataBodyRange.Find(What:=CLng(sSearch), LookIn:=xlValues, LookAt:=xlWhole)
+    End If
+    
+    If Not foundRow Is Nothing Then
+        wsP.Unprotect Password:=""
+        wsP.Range("PZ_WorkName").Value = foundRow.Offset(0, 2).Value
+        wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+        Exit Sub
+    End If
+    
+    ' Ищем по ЗВР (столбец 1)
+    Set foundRow = tbl.ListColumns(1).DataBodyRange.Find(What:=sSearch, LookIn:=xlValues, LookAt:=xlWhole)
+    If foundRow Is Nothing And IsNumeric(sSearch) Then
+        Set foundRow = tbl.ListColumns(1).DataBodyRange.Find(What:=CLng(sSearch), LookIn:=xlValues, LookAt:=xlWhole)
+    End If
+    
+    If Not foundRow Is Nothing Then
+        wsP.Unprotect Password:=""
+        wsP.Range("PZ_WorkName").Value = foundRow.Offset(0, 3).Value
+        wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+    Else
+        wsP.Unprotect Password:=""
+        wsP.Range("PZ_WorkName").ClearContents
+        wsP.Protect Password:="", UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+    End If
 End Sub
