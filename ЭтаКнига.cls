@@ -2,14 +2,14 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Р­С‚Р°РљРЅРёРіР°"
+Attribute VB_Name = "ЭтаКнига"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Private Sub Workbook_Open()
-    ' Р’РєР»СЋС‡Р°РµРј СЃРїРµС†-СЂРµР¶РёРј Р·Р°С‰РёС‚С‹ РґР»СЏ РјР°РєСЂРѕСЃРѕРІ
-    ' Р­С‚Рѕ РїРѕР·РІРѕР»РёС‚ Clear_Pulse Рё Р‘СЌРєР°РїР°Рј СЂР°Р±РѕС‚Р°С‚СЊ РЅР° Р·Р°РєСЂС‹С‚РѕРј Р»РёСЃС‚Рµ
+    ' Включаем спец-режим защиты для макросов
+    ' Это позволит Clear_Pulse и Бэкапам работать на закрытом листе
     On Error Resume Next
     Dim sh As Worksheet
     For Each sh In ThisWorkbook.Worksheets
@@ -17,7 +17,7 @@ Private Sub Workbook_Open()
                    AllowFiltering:=True, AllowSorting:=True
     Next sh
     
-    ' Р—Р°РїСѓСЃРє Р»РѕРіРёРєРё Р±СЌРєР°РїР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё
+    ' Запуск логики бэкапа при открытии
     Run_Smart_Backup_Logic
 End Sub
 
